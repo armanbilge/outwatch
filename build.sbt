@@ -23,7 +23,7 @@ inThisBuild(Seq(
 
 val jsdomVersion = "13.2.0"
 val silencerVersion = "1.7.5"
-val colibriVersion = "0b2299d"
+val colibriVersion = "0f786ce"
 
 lazy val commonSettings = Seq(
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
@@ -116,6 +116,21 @@ lazy val outwatchMonix = project
     libraryDependencies ++= Seq(
       "com.github.cornerman.colibri" %%% "colibri-monix" % colibriVersion,
       "io.monix"      %%% "monix"       % "3.4.0",
+    )
+  )
+
+lazy val outwatchZIO = project
+  .enablePlugins(ScalaJSPlugin, ScalaJSBundlerPlugin)
+  .dependsOn(outwatch)
+  .in(file("zio"))
+  .settings(librarySettings)
+  .settings(
+    name := "OutWatch-ZIO",
+    normalizedName := "outwatch-zio",
+
+    libraryDependencies ++= Seq(
+      "dev.zio" %%% "zio" % "1.0.1",
+      "dev.zio" %%% "zio-interop-cats" % "2.1.4.0"
     )
   )
 
@@ -233,4 +248,4 @@ lazy val root = project
     name := "outwatch-root",
     skip in publish := true,
   )
-  .aggregate(outwatch, outwatchMonix, outwatchSnabbdom, outwatchReactive, outwatchUtil, outwatchRepairDom, tests)
+  .aggregate(outwatch, outwatchMonix, outwatchZIO, outwatchSnabbdom, outwatchReactive, outwatchUtil, outwatchRepairDom, tests)
